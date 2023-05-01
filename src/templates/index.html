@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    main
+    <div id="message"></div>
+     <p>
+        Введите имя: <br /> 
+        <input name="username" id="username" />
+    </p>
+     <p>
+        Введите возраст: <br /> 
+        <input name="userage" id="userage" type="number" />
+    </p>
+    <button onclick="send()">Отправить</button>
+    <script>
+        async function send(){
+     
+            // получаем введеные в поля имя и возраст
+            const username = document.getElementById("username").value;
+            const userage = document.getElementById("userage").value;
+     
+            // отправляем запрос
+            const response = await fetch("/hello", {
+                    method: "POST",
+                    headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        name: username,
+                        age: userage
+                    })
+                });
+                if (response.ok) {
+                    const data = await response.json(); 
+                    document.getElementById("message").textContent = data.message;
+                }
+                else
+                    console.log(response);
+        }
+    </script>
+</body>
+</html>
