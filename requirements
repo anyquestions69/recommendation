@@ -1,7 +1,0 @@
-fastapi
-fastapi-users
-fastapi-users-db-sqlalchemy
-SQLAlchemy
-uvicorn
-asyncpg
-alembic
