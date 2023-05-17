@@ -13,18 +13,21 @@
           <li><a href="/register" class="nav-link px-2 link-body-emphasis ">Регистрация</a></li>
            {{/if}}  
           {{#if user.is_admin }}
-          <li><a href="/tables" class="nav-link px-2 link-body-emphasis ">Админ панель</a></li>
-          
-          <li><a href="/upload" class="nav-link px-2 link-body-emphasis ">Загрузить документ</a></li>
+          <li><a href="/admin" class="nav-link px-2 link-body-emphasis ">Админ панель</a></li>
          
           {{/if}}
         </ul>
       </div>
       <div class="d-flex flex-wrap justify-content-between">
         <div class="input-group">
-        <form action="/" class="mx-1" role="search">
-            <input type="text" class="form-control">
-       
+        <form class="mx-1" role="search" id="search-activities-form">
+            <input type="text" class="form-control" id="search-activities-input" placeholder="Поиск">
+        <ul class="dropdown-menu">
+  <li><span class="dropdown-item-text">Dropdown item text</span></li>
+  <li><a class="dropdown-item" href="#">Action</a></li>
+  <li><a class="dropdown-item" href="#">Another action</a></li>
+  <li><a class="dropdown-item" href="#">Something else here</a></li>
+</ul>
         </form>
         {{#if  user}}
         
@@ -33,20 +36,19 @@
             Уведомления <span class="badge text-bg-secondary"></span>
           </button>
           
-          {{!-- <ul class="dropdown-menu">
-            {% for ntf in notify %}
-            <li><a class="dropdown-item" href="/article/{{ntf.file.id}}">{{ntf.file.name}}</a></li>
-            {% endfor %}
-          </ul>   --}}
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/article/{{user.activities}}">aa</a></li>
+          
+          </ul>  
             <button class="btn btn-outline-secondary dropdown-toggle" style="border-radius:  0 0.25rem 0.25rem 0 ;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
              {{user.email}}
             </button>
             <ul class="dropdown-menu">
               {{#if user.is_admin }}
-              <li><a class="dropdown-item" href="/tables">Админ панель</a></li>
+              <li><a class="dropdown-item" href="/admin">Админ панель</a></li>
               {{/if}}
               <li><a class="dropdown-item" href="/account">Редактировать</a></li>
-              <li><a class="dropdown-item" href="/logout">Выйти</a></li>
+              <li><a class="dropdown-item" href="/api/auth/logout">Выйти</a></li>
             </ul>
             
         

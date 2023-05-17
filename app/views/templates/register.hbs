@@ -78,30 +78,39 @@
           z-index: 1500;
         }
       </style>
-    <title>Авторизация</title>
+    <title>Регистрация</title>
 </head>
 <body class="text-center">
    
     
 <main class="w-100 m-auto form-signin ">
    
-    <form method = "post" enctype="multipart/form-data">
+    <form  enctype="multipart/form-data">
    
     <a href="/"><img class="mb-4" src="logo.png"  alt="" width="72" height="72"></a>
     <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
 
-    <div class="form-floating">
-       {{!--  {{form.name}} --}}
+    <div class="form-floating  mb-2">
+        <input type="email" class="form-control mb-0" name="email" id="email" style="border-radius: 0.25rem;" placeholder="email">
      
     </div>
-    <div class="form-floating">
-      <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Секретная фраза">
+    <div class="form-floating mb-2">
+        <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Имя">
+     
+    </div>
+    <div class="form-floating  mb-2">
+        <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Фамилия">
+     
+    </div>
+    <div class="form-floating  mb-2">
+      <input type="password" class="form-control mb-0" name="password" style="border-radius: 0.25rem;" id="password" placeholder="Пароль">
     
-    </div> {{!-- {% if errors %}<div id="validationServerUsernameFeedback" class="text-danger">
-        {% for er in errors %}
-            {{er}}
-            {% endfor %}
-      </div>  {% endif %} --}}
+    </div> 
+    <div class="form-floating  mb-2">
+      <input type="password" class="form-control mb-0" name="repass" id="repass" style="border-radius: 0.25rem;" placeholder="Повторите пароль">
+    
+    </div> <div id="validationServerUsernameFeedback" class="text-danger"></div>
+      
 
 
     <div class="checkbox mb-3">
@@ -110,12 +119,46 @@
       </label>
     </div>
     <div class="mb-3"> <span>Уже есть аккаунт? </span><a href="/login">Авторизация</a></div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Зарегистрироваться</button>
+    <button class="w-100 btn btn-lg btn-primary" type="button" id="reg">Зарегистрироваться</button>
     
     <p class="mt-5 mb-3 text-body-secondary"><a href="/">На главную</a></p>
   </form>
  
 </main>
 {{>footer}}
+<script type="text/javascript">
+                     $(window).on('load', function() {
+                      $("#reg").on('click',async()=>{
+                          const user = {
+                            email:$('#email').val(),
+                            password:$('#password').val(),
+                            first_name:$('#first_name').val(),
+                            last_name:$('#last_name').val(),
+                            repass : $('#repass').val(),
+                          }
+                         let response = await fetch('/api/auth/register',{
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                          },
+                          body: JSON.stringify(user)
+                         })
+                          let text = await response.text()
+                          if(response.ok){
+                          window.location.href ="/"
+                          }
+                          console.log(text)
+                              $('#validationServerUsernameFeedback').empty().append(`<p>${text}</p>`)
+                              
+                              $('input[type="password"]').css('border-color', 'red'); 
+                         
+                  
+                            
+                          
+                        
+                      })
+                     })
+                      
+                 </script>
 </body>
 </html>

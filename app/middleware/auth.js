@@ -23,6 +23,9 @@ class Auth{
         if(!req.user.is_admin)return res.status(403).send("Вы не являетесь администратором")
         next()
     }
+    async onlyOwner(req,res,next){
+        if(req.user.id!=req.params['id'])return res.status(403).send("Вы не можете изменять чужой аккаунт")
+    }
     async getUser(req, res,next){
         const token = req.cookies.accessToken
 

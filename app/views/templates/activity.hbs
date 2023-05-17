@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  {{>meta}}
+    
+    <title>{{activity.name}} </title>
+</head>
+<body class="" >
+  {{>nav}}
+    <div class="container bg-primary-subtle">  
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <a href="/login" class="btn btn-primary" id="loginhref"></a>
+                </div>
+                </div>
+            </div>
+        </div>
+
+
+      <div class="row">
+        <div class="col-8">
+       
+            
+              <h1 >{{activity.name}} </h1>
+              <p>Занятия по изучению теории и практики вождения транспортных средств.</p>
+             <div class="card mb-4">
+            <div class="card-header">
+                Запись
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Группа 1</h5>
+                <table class="mb-2"> 
+                    <tbody>
+                        <tr>    
+                            <td>Ср</td>
+                            <td>14:40-16:30</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button href="" id="group-1" class="btn btn-primary sign-up">Записаться</button>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Группа 2</h5>
+                <table class="mb-2"> 
+                    <tbody>
+                        <tr>    
+                            <td>Ср</td>
+                            <td>14:40-16:30</td>
+                        </tr>
+                        <tr>    
+                            <td>Чт</td>
+                            <td>14:40-16:30</td>
+                        </tr>
+                        <tr>    
+                            <td>Ср</td>
+                            <td>14:40-16:30</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="#" id="group-2" class="btn btn-primary">Записаться</a>
+            </div>
+            </div>
+              
+            <h2>Как записаться</h2>
+
+            <p>Записаться на занятия можно, обратившись в территориальный центр социального обслуживания по телефону или, оставив онлайн-заявку на портале.
+
+            Узнать подробности о проекте и о том, как стать его участником можно по телефону горячей линии +7 495 777-77-77
+             </p>
+                       
+
+                        </div>
+        <div class="col-4">
+            <div class="border rounded p-4">
+          <h5>Запись в группу ведёт</h5>
+            <b>ГБУ ТЦСО "Ясенево" филиал "Теплый Стан"</b>
+            <p>Телефон для справок:
+            +7(495)338-37-11</p>
+            <address>город Москва, Профсоюзная улица, дом 142</address>
+            </div>
+        </div>
+      </div>
+        
+         
+              <input type="hidden" id="id" name="" value="{{activity.id}}">
+              
+                  </div>
+{{>footer}}
+                   
+                 <script>
+                    $('.sign-up').on('click',async function(){
+                        let id = $('#id').val()
+                        console.log(id)
+                        let response = await fetch(`/api/activities/${id}`, {method: 'POST'})
+                          let txt = await response.text()
+                          console.log(txt)
+                          $('#exampleModal').modal('show');
+                          $('#exampleModalLabel').text(txt)
+                          if(!response.ok){
+                            $('#loginhref').text('Войти в учетную запись')
+                          }
+                    })
+                    
+</script>
+             </body>
+             </html>
