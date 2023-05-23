@@ -79,9 +79,8 @@ function init() {
         }, {
             searchControlProvider: 'yandex#search'
         });
-
-    // Сравним положение, вычисленное по ip пользователя и
-    // положение, вычисленное средствами браузера.
+    var points =[]
+    
     geolocation.get({
         provider: 'yandex',
         mapStateAutoApply: true
@@ -91,19 +90,47 @@ function init() {
         result.geoObjects.get(0).properties.set({
             balloonContentBody: 'Мое местоположение'
         });
-        myMap.geoObjects.add(result.geoObjects);
+        let multiRoute = new ymaps.multiRouter.MultiRoute({
+            referencePoints: [
+                result.geometry.getCoordinates(),
+                $('#address').text()
+            ],
+            params: {
+                
+                routingMode: 'pedestrian'
+            }
+        }, {
+            // Автоматически устанавливать границы карты так, чтобы маршрут был виден целиком.
+            boundsAutoApply: true
+        });
+        myMap.geoObjects.add(multiRoute);
+        //myMap.geoObjects.add(result.geoObjects);
     });
 
     geolocation.get({
         provider: 'browser',
         mapStateAutoApply: true
     }).then(function (result) {
-        // Синим цветом пометим положение, полученное через браузер.
-        // Если браузер не поддерживает эту функциональность, метка не будет добавлена на карту.
+        
         result.geoObjects.options.set('preset', 'islands#blueCircleIcon');
-        myMap.geoObjects.add(result.geoObjects);
+        points.push(result.geoObjects)
+        //myMap.geoObjects.add(result.geoObjects);
     });
-
+    
+let multiRoute = new ymaps.multiRouter.MultiRoute({
+            referencePoints: [
+                [55, 34],
+                $('#address').text()
+            ],
+            params: {
+                
+                routingMode: 'pedestrian'
+            }
+        }, {
+            // Автоматически устанавливать границы карты так, чтобы маршрут был виден целиком.
+            boundsAutoApply: true
+        });
+        myMap.geoObjects.add(multiRoute);
 ymaps.geocode($('#address').text(), {
         results: 1
     }).then(function (res) {
@@ -114,10 +141,12 @@ ymaps.geocode($('#address').text(), {
             firstGeoObject.options.set('preset', 'islands#darkBlueDotIconWithCaption');
             firstGeoObject.properties.set('iconCaption', firstGeoObject.getAddressLine());
             myMap.geoObjects.add(firstGeoObject);
+            points.push(firstGeoObject)
+            console.log(points)
             myMap.setBounds(bounds, {
                 checkZoomRange: true
             });
-            console.log('Все данные геообъекта: ', firstGeoObject.properties.getAll());
+            /*console.log('Все данные геообъекта: ', firstGeoObject.properties.getAll());
             console.log('Метаданные ответа геокодера: ', res.metaData);
             console.log('Метаданные геокодера: ', firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData'));
             console.log('precision', firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.precision'));
@@ -129,7 +158,7 @@ ymaps.geocode($('#address').text(), {
             console.log('Населенный пункт: %s', firstGeoObject.getLocalities().join(', '));
             console.log('Адрес объекта: %s', firstGeoObject.getAddressLine());
             console.log('Наименование здания: %s', firstGeoObject.getPremise() || '-');
-            console.log('Номер здания: %s', firstGeoObject.getPremiseNumber() || '-');
+            console.log('Номер здания: %s', firstGeoObject.getPremiseNumber() || '-');*/
 
         });
 
