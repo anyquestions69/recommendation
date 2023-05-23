@@ -49,16 +49,7 @@
                         <a style="cursor:pointer" class="btn-close set-rec" data-bs-dismiss="modal" aria-label="Close">&times;</a>
                     </div>
                     <div id="rec-act" class="modal-body">
-                        {{!-- <div class="row row-cols-3">
-                          {{#each activities}}
-                                {{divideby }}
-                                <div class="col-4">
-                                <div class=" card border  h5 mb-0 text-center align-middle  my-2" >
-                                    <a href="#" class="stretched-link fw-bold py-5">{{this.name}}</a>
-                                  </div>
-                           </div>
-                          {{/each}}
-                        </div> --}}
+                       
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Назад</button>
@@ -72,37 +63,101 @@
       <div class="row">
         <div class="col-4"><h4>Фильтры</h4>
         <form  enctype="multipart/form-data" id="activity-form">
-                <div class="form-floating  mb-2">
-                    <select class="form-control" name="" id="filter-cat">
+                
+                <div class="form-floating mb-3">
+                  <label for="title">Направление</label>
+                    <input type="text" class="form-control" name="title" id="filter-name" placeholder="Направление или номер группы">
+                </div>
+                
+                 <div class="form-floating mb-3">
+                  <label for="type">Формат занятий</label>
+                    <select class="form-control" name="type" id="type">
                       <option value="0">Все</option>
-                      
+                      <option value="1">Оффлайн</option>
+                      <option value="2">Онлайн</option>
                     </select>
                 </div>
-                <div class="form-floating mb-2">
-                    <input type="text" class="form-control" name="title" id="filter-name" placeholder="Название">
+                 <div class="form-floating mb-3" id="weekday">
+                  <label for="">Расписание</label>
+                    <a class="btn btn-primary dropdown-toggle" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                      Выбрать дни недели
+                    </a>
+                  <div class="collapse" id="collapseExample">
+
+                  <div class="form-check">
+                    <input class="form-check-input week" type="checkbox" id="monday" name="vehicle1" value="Пн">
+                    <label class="form-check-label" for="monday">Понедельник</label></div><div class="form-check">
+                    <input class="form-check-input week" type="checkbox" id="tuesday" name="vehicle1" value="Вт">
+                    <label class="form-check-label" for="tuesday">Вторник</label></div><div class="form-check">
+                    <input class="form-check-input week" type="checkbox" id="wednesday" name="vehicle1" value="Ср">
+                    <label class="form-check-label" for="wednesday">Среда</label></div><div class="form-check">
+                    <input class="form-check-input week" type="checkbox" id="thursday" name="vehicle1" value="Чт">
+                    <label class="form-check-label" for="thursday">Четверг</label></div><div class="form-check">
+                    <input class="form-check-input week" type="checkbox" id="friday" name="vehicle1" value="Пт">
+                    <label class="form-check-label" for="friday">Пятница</label></div><div class="form-check">
+                    <input class="form-check-input week" type="checkbox" id="saturday" name="vehicle1" value="Сб">
+                    <label class="form-check-label" for="saturday">Суббота</label></div><div class="form-check">
+                    <input class="form-check-input week" type="checkbox" id="sunday" name="vehicle1" value="Вс">
+                    <label class="form-check-label" for="sunday">Воскресенье</label></div><div class="form-check">
+                     </div>
                 </div>
+                </div>
+                <div class="form-floating mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input"  type="checkbox" value="" id="status" > 
+                    <label class="form-check-label" for="status">
+                      Группа занимается
+                    </label>
+                  </div>
+
+                </div>
+               
                 <div id="validationServerUsernameFeedback" class="text-danger"></div>
                 <div id="act-success" class="text-success"></div>
-                <button class="w-100 btn btn-lg btn-primary" type="button" id="filter-submit">Поиск</button>
+                <button class="w-100 btn btn-lg btn-primary mt-2" type="button" id="filter-submit">Поиск</button>
             </form>
+
+            <div class="card my-4">
+              <div class="card-header">
+                <h5>ПРОМО занятия</h5>
+              </div>
+              <div class="card-body p-2">
+                <ol id="promo-list" class="list-group">
+                  <a href="/groups/123" class="list-group-item-action border-bottom p-3" aria-current="true">
+                            <p class="lead">Лекция мастер-класс в МГУ</p> <span class="badge bg-success text-white">Сегодня</span>
+                          
+                  </a>
+                  <a href="/groups/456" class="list-group-item-action border-bottom p-3" aria-current="true">
+                            <p class="lead">Экскурсия на ВДНХ</p> <span class="badge bg-info text-white">Завтра</span>
+                  </a>
+                </ol>
+              </div>
+            </div>
         </div>
         <div class="col-8"><ol id="list" class="list-group">
           
        
-          </ol></div>
+          </ol>
+          <nav aria-label="Page navigation example" class="text-center my-4">
+  <ul class="pagination d-flex justify-content-center" id="pagination">
+   
+  </ul>
+</nav></div>
       </div>
+      
         
          
               
               
                   </div>
 {{>footer}}
-{{!-- {{#if newUser}} --}}
+{{#if newUser}}
 <script>
   let likedCategories =[]
-    let likedActivities = []
+  let likedActivities = []
+
+
    async function sendStatistic(element){
-        console.log($(element))
         let id = $(element).data('id')
         if(likedActivities.includes(id)){
           let index = likedActivities.indexOf(id);
@@ -112,7 +167,6 @@
         }else{
           likedActivities.push(id)
         }
-        console.log(likedActivities)
         $(element).toggleClass('btn-primary')
       }
 $(window).on('load', async function() {
@@ -123,7 +177,10 @@ $(window).on('load', async function() {
             })
 
 
-   
+   $('#exampleModalToggle3').on('hidden.bs.modal', function () {
+      fetch(`/api/users/interest/?likedAct=${likedActivities.join()}&likedCat=${likedCategories.join()}`)
+      .then(result=>{result.json()}).then(res=>console.log(res))
+    })
 
 
     let res = await fetch('/api/categories') 
@@ -179,69 +236,177 @@ $(window).on('load', async function() {
     
 })
 </script>
-{{!-- {{/if}} --}}
+{{/if}}
 <script type="text/javascript">
-$(window).on('load', function() {
-      
-    const urlParams = new URLSearchParams(window.location.search);
-    let  act_name = urlParams.get('name');
-    let  cat_name = urlParams.get('category');
+function getDate(today){
+  const yyyy = today.getFullYear();
+let mm = today.getMonth() + 1; // Months start at 0!
+let dd = today.getDate();
 
-    
-    $('#filter-name').val(act_name)
-        fetch(`/api/activities?name=${act_name||''}&category=${cat_name||''}`).then(response => response.json()).then(res=>{
-        for( let r of res){
-          let li = `<a href="/activities/${r.id}" class="list-group-item list-group-item-action" aria-current="true">
-                    <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-1">${r.name}</h5>
-                      <div>
-                      <small>3 дня назад</small>
-                      <span class="badge bg-primary text-white rounded-pill" style="background-color: #6f42c1;" >${r.users.length} участников</span>
-                      </div>
-                    </div>
-                    <p class="mb-1"></p>
-                    <small>Спорт</small>
-                  </a>
-                  `
-            $('#list').append(li)
-        }
-        })
+if (dd < 10) dd = '0' + dd;
+if (mm < 10) mm = '0' + mm;
 
-        fetch(`/api/categories/`).then(response=>response.json()).then(res=>{
-          for(let r of res){
-            let opt = `<option value="${r.id}">${r.name}</option>`
-            $('#filter-cat').append(opt)
-          }
-          
-        })
+return {str:dd + '.' + mm + '.' + yyyy, dd, mm, yyyy};
+}
 
-        $('#filter-submit').on('click',()=>{
-          const filter = {
-            name:$('#filter-name').val(),
-            cat_n:$('#filter-cat').val()
-          }
-          fetch(`/api/activities?name=${filter.name}&category=${filter.cat_n||''}`).then(response => response.json()).then(res=>{
-            $('#list').empty()
-            for( let r of res){
-              let li = `<a href="/activities/${r.id}" class="list-group-item list-group-item-action" aria-current="true">
+function getData(page,type,id, days, status){
+  let params = `/?type=${type||''}&id=${id||''}&days=${days||''}&status=${status}&`
+  let url = `/api/groups${params}`
+  fetch(`${url}page=${page||1}`).then(response => response.json()).then(res=>{
+
+        $('#list').empty()
+        for( let r of res.groups){
+          if(r.schedule_1){
+              let date = r.schedule_1.split(';')
+              //console.log(date)
+              const today =getDate(new Date())
+              let curDate=[]
+              for(let i = 0;i<date.length;i++){
+                  if(date[i].split(' ')[1].split('.')[2]==today.yyyy/*&&
+                  date[i].split(' ')[3].split('.')[1]>=today.mm && 
+                  date[i].split(' ')[3].split('.')[0]>=today.dd*/){
+                    curDate.push(date[i])
+                  }
+              }
+              let type=''
+              let color=''
+              if(r.activity.includes('ОНЛАЙН')){
+                type='Онлайн формат'
+                color='secondary'
+              }else{
+                type='Очный формат'
+                color='primary'
+              }
+              //<dd class="col-sm-9">${curDate[0].split('3,')[1].replace('.', '').split('. ')[1]}</dd>
+              if(curDate.length!=0){
+              let li = `<a href="/groups/${r.id}" class="list-group-item list-group-item-action" aria-current="true">
                         <div class="d-flex w-100 justify-content-between">
-                          <h5 class="mb-1">${r.name}</h5>
                           <div>
-                          <small>3 дня назад</small>
-                          <span class="badge bg-primary text-white rounded-pill" style="background-color: #6f42c1;" >${r.users.length} участников</span>
+                          <p>${r.cat_1}</p>
+                          <h4 class="mb-1"><b>${r.activity}</b></h4>
+                          <p><span class="badge bg-${color} display-6 text-white mr-2">${type}</span><span class="badge bg-success text-white">Группа занимается</span></p>
+                          <address >${r.address||'Онлайн'}</address>
+                         <blockquote class="blockquote"><b>Группа <span class="text-secondary">${r.id}</span></b></blockquote>
+                           <figcaption class="blockquote-footer">
+                            ${curDate[0].split(',')[0]}
+                          </figcaption>
+
+                          <p>${curDate[0].split('3,')[1].replace('.', '')}</p>
+                          
+                          
                           </div>
+                          <div class="text-right w-30 text-success">
+                         <p class="mb-1">${r.cat_2}</p>
+                          </div>
+                          
                         </div>
-                        <p class="mb-1"></p>
-                        <small>Спорт</small>
+                         <div class="d-flex w-100 justify-content-between align-items-center">
+                        <span class='rounded p-1 text-secondary border border-secondary'>Для ума</span>
+                       <button class='btn btn-primary float-right'>Записаться</button>
+                        </div>
                       </a>
                       `
-                $('#list').append(li)
-            }
+                      $('#list').append(li)
+              }else{
+                let li = `<a href="/groups/${r.id}" class="list-group-item list-group-item-action" aria-current="true">
+                        <div class="d-flex w-100 justify-content-between">
+                          <div>
+                          <small>${r.cat_1}</small>
+                          <h5 class="mb-1">${r.activity}</h5>
+                          <p><span class="badge bg-${color} text-white mr-2">${type}</span><span class="badge bg-danger text-white">Закончились</span></p>
+                          <address>${r.address||'Онлайн'}</address>
+                          <b>Группа ${r.id}</b>
+                          <p>Занятия закончились</p>
+                          </div>
+                          <div class="text-right w-30 text-success">
+                         <p class="mb-1">${r.cat_2}</p>
+                          </div>
+                        </div>
+                       
+                        
+                      </a>
+                      `
+                      $('#list').append(li)
+              }
+          }
             
-            
-            })
-        })
+        }
+        $('#pagination').empty()
+        if(res.currentPage>1){
+        $('#pagination').append(` <li class="page-item"><a class="page-link" href="${params}page=1">В начало</a></li>
+    <li class="page-item"><a class="page-link" href="${params}page=${res.currentPage-1}">${res.currentPage-1}</a></li>
+    <li class="page-item active"><a class="page-link" href="${params}page=${res.currentPage}">${res.currentPage}</a></li>`)
+        if(res.currentPage!=res.totalPages){
+        $('#pagination').append(` 
+        <li class="page-item"><a class="page-link" href="${params}page=${res.currentPage+1}">${res.currentPage+1}</a></li>
+        <li class="page-item"><a class="page-link" href="${params}page=${res.totalPages}">В конец</a></li>`)
+        }
+        }else{
+           $('#pagination').append(` <li class="page-item disabled"><a disabled class="page-link" href="/?page=1&type=${type||''}&id=${id||''}">В начало</a></li>
+     <li class="page-item active"><a class="page-link" href="${params}page=${res.currentPage}">${res.currentPage||1}</a></li>`)
+          if(res.currentPage!=res.totalPages){
+        $('#pagination').append(` 
+        <li class="page-item"><a class="page-link" href="${params}page=${res.currentPage+1}">${res.currentPage+1}</a></li>
+        <li class="page-item"><a class="page-link" href="${params}page=${res.totalPages}">В конец</a></li>`)
+        }
+        }
+        
+})
+}
+
+$(window).on('load', function() {
+
+  
+ 
+      
+  let urlParams = new URLSearchParams(window.location.search);
+  let  act_name = urlParams.get('name');
+  let  id = urlParams.get('id');
+  let page =  urlParams.get('page');
+  let type =  urlParams.get('type');
+  let days =  urlParams.get('days');
+  let status =(urlParams.get('status')==='true')
+  if(urlParams.get('status')===null){
+    status=true
+  } 
+ 
+    $('#status').attr('checked', status)
+    
+
+
+
+  getData(page, type, id, days, status)
+
+
+  $('#filter-name').val(id)
+  $('#type').val(type||0).change();
+
+
+  if(days){
+    let arr = days.split(',')
+  for(let i =0; i<arr.length;i++){
+    $(`.week:input[value="${arr[i]}"]`).attr('checked', 'checked');
+
+  }
+  }
+  $('#filter-submit').on('click',()=>{
+    let weekDays=[]
+    $('.week:checked').each(function() {
+      weekDays.push(this.value);
     });
+    
+    const filter = {
+      id:$('#filter-name').val(),
+      cat_n:$('#filter-cat').val(),
+      type:$('#type').val(),
+      status:$('#status').is(':checked')
+    }
+    urlParams.set('type',$('#type').val())
+    urlParams.set('id',$('#filter-name').val())
+    getData(1,filter.type, filter.id, weekDays.join(), filter.status)
+    
+      })
+});
 </script>
                  
              </body>

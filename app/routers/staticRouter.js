@@ -1,30 +1,23 @@
 const express = require("express");
-const userController = require("../controllers/userController.js");
-let activityController=require("../controllers/activityController.js");
 const viewRouter = express.Router();
 var path = require('path');
-const auth = require('../middleware/auth.js')
 const visit = require('../middleware/visitor.js')
-const {Activity} = require('../models/user.js')
+const groupController = require('../controllers/groupController.js')
 
-viewRouter.get('/',auth.getUser, visit.newUser,async(req,res)=>{
-    let act = await Activity.findAll()
+viewRouter.get('/',visit.newUser,async(req,res)=>{
+    
         return  res.render('index.hbs', {
-            user: req.user,
-            notlogged: !req.user,
-            newUser:req.newUser,
-            activities:act
+            newUser:req.newUser
             });
 
 })
-viewRouter.get('/login', (req,res)=>{res.render('login.hbs')})
-viewRouter.get('/register', (req,res)=>{res.render('register.hbs')})
-viewRouter.get('/admin',auth.authorized, auth.onlyAdmin, (req,res)=>{
-    return  res.render('admin.hbs', {
-        user: req.user,
-        notlogged: !req.user
-        });
+viewRouter.get('/test',(req,res)=>{
+    return res.render('test.hbs')
 })
-viewRouter.get('/activities/:id',auth.getUser, activityController.viewOne)
+viewRouter.get('/groups/:id', groupController.viewOne)
+viewRouter.get('/store-data', (req,res)=>{
+    return res.render('loading.hbs')
+})
+
 
 module.exports = viewRouter

@@ -33,35 +33,35 @@ const Role = sequelize.define("role",{
 })
 
 const User = sequelize.define("user", {
-    id: {
-      type: Sequelize.INTEGER,
+    uid: {
+      type: Sequelize.BIGINT,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    email: {
-      type: Sequelize.STRING,
-      allowNull: false,
+    createdAt:{
+      type:Sequelize.TIME,
+      allowNull:true
     },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false
+    gender:{
+      type:Sequelize.STRING,
+      allowNull: true
     },
-    first_name:{
-       type: Sequelize.STRING,
+    birthdate:{
+      type:Sequelize.STRING,
+      allowNull: true
     },
-    last_name:{
-        type: Sequelize.STRING,
-     },
-     is_admin:{
-        type:Sequelize.BOOLEAN,
-        default:false
-     }
+    address:{
+      type:Sequelize.STRING,
+      allowNull: true
+    }
+  },{
+    timestamps: false
   });
 
   const Activity = sequelize.define('activity',{
     id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false
@@ -74,6 +74,8 @@ const User = sequelize.define("user", {
         type:Sequelize.TEXT,
         allowNull:true
       }
+  },{
+    timestamps: false
   })
   const Category = sequelize.define('category',{
     id: {
@@ -90,53 +92,80 @@ const User = sequelize.define("user", {
         type:Sequelize.STRING,
         allowNull:true
       }
+  },{
+    timestamps: false
   })
-  const Enrolment = sequelize.define("enrolment", {
-    id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-      allowNull: false
-    },
-    date: {                   
-      type: Sequelize.DATE,
-      allowNull: false,
-      default:Date.now()
-    }
-});
+
 
 const Group = sequelize.define('group',{
   id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.BIGINT,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
+  },
+  cat_1:{
+    type:Sequelize.STRING,
+    allowNull:true
+  },
+  cat_2:{
+    type:Sequelize.STRING,
+    allowNull:true
+  },
+  activity:{
+    type:Sequelize.STRING,
+    allowNull:true
+  },
+  address:{
+    type:Sequelize.TEXT,
+    allowNull:true
+  },
+  okrug:{
+    type:Sequelize.TEXT,
+    allowNull:true
+  },
+  district:{
+    type:Sequelize.TEXT,
+    allowNull:true
+  },
+  inPerson:{
+    type:Sequelize.BOOLEAN,
+    allowNull:true
+  },
+  schedule:{
+    type:Sequelize.TEXT,
+    allowNull:true
+  },
+  schedule_1:{
+    type:Sequelize.TEXT,
+    allowNull:true
+  },
+  schedule_2:{
+    type:Sequelize.TEXT,
+    allowNull:true
+  },
+  status:{
+    type:Sequelize.STRING,
+    allowNull:true
   }
+
+},{
+  timestamps: false
 })
 User.hasOne(Role, { onDelete: "cascade"})
 User.hasOne(Visitor, {onDelete:"cascade"})
 Visitor.hasOne(User, {onDelete:"cascade"})
-User.belongsToMany(Activity, {through: Enrolment});
-Activity.belongsToMany(User, {through: Enrolment});
 Activity.hasMany(Group, {onDelete:"cascade"})
 Category.hasOne(Activity)
 Group.hasMany(User, {onDelete:"cascade"})
 User.hasMany(Group, {onDelete:"cascade"})
+
+
 sequelize.sync({force: false}).then(async function (result){
-   
-        let pass =  bcrypt.hashSync(process.env.ADMIN_PASS, 10)
-        console.log(pass)
-        const [admin, сreated] = await  User.findOrCreate({where:{email:process.env.ADMIN_EMAIL},
-          defaults:{
-                password:  pass,
-                first_name:'admin',
-                last_name:'adminov',
-                is_admin:true
-                
-        }})
-        return admin
+
+
     
 })
 .catch(err=> console.log(err));
 
-module.exports = {User, Activity, Enrolment, Visitor, Group, Category}
+module.exports = {User, Activity, Visitor, Group, Category}

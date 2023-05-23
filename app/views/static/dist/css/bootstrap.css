@@ -2788,6 +2788,9 @@ fieldset:disabled a.btn {
 
 .btn-outline-primary:focus, .btn-outline-primary.focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+  color: #fff;
+  background-color: #d63384;
+  border-color: #d63384;
 }
 
 .btn-outline-primary.disabled, .btn-outline-primary:disabled {
@@ -4817,8 +4820,8 @@ tbody.collapse.show {
 
 .badge {
   display: inline-block;
-  padding: 0.25em 0.4em;
-  font-size: 75%;
+  padding: 0.35em 0.5em;
+  font-size: 100%;
   font-weight: 700;
   line-height: 1;
   text-align: center;
