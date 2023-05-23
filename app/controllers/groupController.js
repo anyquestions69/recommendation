@@ -1,9 +1,6 @@
 const {Activity , Group} = require('../models/user')
 const { Op } = require("sequelize");
-var url = "https://cleaner.dadata.ru/api/v1/clean/address";
-var token = "5985dfed520414e420a61270acd6fed188809798";
-const Dadata = require('dadata-suggestions');
-const dadata = new Dadata(token);
+const Sequelize = require('sequelize')
 
    
 
@@ -18,7 +15,7 @@ const getPagingData = (data, page, limit) => {
 
 class Manager{
     async getGroups(req,res) {  
-        let {id, cat1, cat2, activity, days, status, type, schedule,page}=req.query
+        let {id, cat_1, cat2, activity, days, status, type, schedule,page}=req.query
             let filter =[]
             let exclude
             
@@ -50,9 +47,10 @@ class Manager{
                     [Op.or]:avMonths
                 }})
             }
-            if(cat2){
-                filter.push({cat2:{
-                    [Op.or]:cat2.split(',')
+            if(cat_1){
+                console.log(cat_1)
+                filter.push({cat_1:{
+                    [Op.or]:cat_1.split(',')
                 }})
             }
             if(activity){
@@ -104,25 +102,16 @@ class Manager{
 
     }
     async getActCat(req,res){
-        const catId = req.query.id
-        console.log(catId)
-        let ids=[]
-        if(catId){
-            let act = await Group.findAll({where:{categoryId :{
-                [Op.or]: catId.split(',')
-            }}})
-            
-            for(let a in act){
-                ids.push(a.id)
-            }
-            let result = await Group.findAll({where:{categoryId :{
-                [Op.or]: ids.split(',')
-            }}})
-            return res.send(result)
-        }else{
-            let result = await Group.findAll()
+        
+      
+            let result = await Group.findAll({attributes: [
+               
+                [Sequelize.fn('DISTINCT', Sequelize.col('cat_1')) ,'cat_1'],
+        
+        
+            ]})
              return res.send(result)
-        }
+        
     }
     async getOne(req,res){
         let act = await Group.findOne({where:{id:req.params['id']}})

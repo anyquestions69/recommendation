@@ -65,10 +65,19 @@
         <form  enctype="multipart/form-data" id="activity-form">
                 
                 <div class="form-floating mb-3">
-                  <label for="title">Направление</label>
-                    <input type="text" class="form-control" name="title" id="filter-name" placeholder="Направление или номер группы">
+                  <label for="title">Название</label>
+                    <input type="text" class="form-control" name="title" id="filter-name" placeholder="Название активности или номер группы">
                 </div>
                 
+                <div class="form-floating mb-3">
+                  <label for="cat_1">Направление</label>
+                 <select id="cat_1" class="selectpicker multi-select form-control" multiple data-live-search="true">
+                 {{#each select}}
+                    <option value="{{this.cat_1}}">{{this.cat_1}}</option>
+                 {{/each}}
+                  </select>
+                </div>
+
                  <div class="form-floating mb-3">
                   <label for="type">Формат занятий</label>
                     <select class="form-control" name="type" id="type">
@@ -151,6 +160,7 @@
               
                   </div>
 {{>footer}}
+
 {{#if newUser}}
 <script>
   let likedCategories =[]
@@ -249,8 +259,8 @@ if (mm < 10) mm = '0' + mm;
 return {str:dd + '.' + mm + '.' + yyyy, dd, mm, yyyy};
 }
 
-function getData(page,type,id, days, status){
-  let params = `/?type=${type||''}&id=${id||''}&days=${days||''}&status=${status}&`
+function getData(page,type,id, days, status, cat_1){
+  let params = `/?type=${type||''}&id=${id||''}&days=${days||''}&status=${status}&cat_1=${cat_1||''}&`
   let url = `/api/groups${params}`
   fetch(`${url}page=${page||1}`).then(response => response.json()).then(res=>{
 
@@ -366,16 +376,23 @@ $(window).on('load', function() {
   let type =  urlParams.get('type');
   let days =  urlParams.get('days');
   let status =(urlParams.get('status')==='true')
+  let cat_1 = urlParams.get('cat_1');
   if(urlParams.get('status')===null){
     status=true
   } 
  
     $('#status').attr('checked', status)
     
+  /*fetch('/api/groups/cat/show').then(res=>res.json(res)).then(result=>{
+    console.log(result)
+    for(let i=0;i<result.length;i++){
+      console.log(result[i])
+      $('#cat_1').append(`<option>${result[i].cat_1}</option>`)
+    }
+})
+*/
 
-
-
-  getData(page, type, id, days, status)
+  getData(page, type, id, days, status, cat_1)
 
 
   $('#filter-name').val(id)
@@ -399,11 +416,13 @@ $(window).on('load', function() {
       id:$('#filter-name').val(),
       cat_n:$('#filter-cat').val(),
       type:$('#type').val(),
-      status:$('#status').is(':checked')
+      status:$('#status').is(':checked'),
+      cat_1:$('#cat_1').val()
     }
+    console.log(filter.cat_1)
     urlParams.set('type',$('#type').val())
     urlParams.set('id',$('#filter-name').val())
-    getData(1,filter.type, filter.id, weekDays.join(), filter.status)
+    getData(1,filter.type, filter.id, weekDays.join(), filter.status, filter.cat_1.join())
     
       })
 });

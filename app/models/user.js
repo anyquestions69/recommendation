@@ -1,10 +1,6 @@
 const Sequelize = require("sequelize");
 const sequelize = require('../config/database')
-const bcrypt = require('bcrypt')
-function getDate(currentdate) { return currentdate.getDay() + "/" + currentdate.getMonth() 
-+ "/" + currentdate.getFullYear() + " " 
-+ currentdate.getHours() + ":" 
-+ currentdate.getMinutes() + ":" + currentdate.getSeconds()  }
+
 
 const Visitor = sequelize.define('visitor',{
     id: {
@@ -40,7 +36,7 @@ const User = sequelize.define("user", {
       allowNull: false
     },
     createdAt:{
-      type:Sequelize.TIME,
+      type:Sequelize.TEXT,
       allowNull:true
     },
     gender:{
@@ -52,7 +48,7 @@ const User = sequelize.define("user", {
       allowNull: true
     },
     address:{
-      type:Sequelize.STRING,
+      type:Sequelize.TEXT,
       allowNull: true
     }
   },{
@@ -152,13 +148,7 @@ const Group = sequelize.define('group',{
 },{
   timestamps: false
 })
-User.hasOne(Role, { onDelete: "cascade"})
-User.hasOne(Visitor, {onDelete:"cascade"})
-Visitor.hasOne(User, {onDelete:"cascade"})
-Activity.hasMany(Group, {onDelete:"cascade"})
-Category.hasOne(Activity)
-Group.hasMany(User, {onDelete:"cascade"})
-User.hasMany(Group, {onDelete:"cascade"})
+
 
 
 sequelize.sync({force: false}).then(async function (result){
